@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConNumEventArgs.cs" />
+    <Compile Include="Container_Socket_DLL.cs" />
     <Compile Include="MessageEventArgs.cs" />
     <Compile Include="NewLpnEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
