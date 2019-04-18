@@ -4,7 +4,7 @@ using System.Net.Sockets;
 
 namespace Container_Socket_DLL
 {
-    public class Container_Socket_DLL
+    public class Container_Socket
     {
         # region//来车触发数据事件
         public event EventHandler<NewLpnEventArgs> NewLpnEvent;             //空车车牌
@@ -65,7 +65,7 @@ namespace Container_Socket_DLL
         /// <param name="Intervals">间隔时间</param>
         /// <param name="LocalIp">本机绑定地址</param>
         /// <param name="LocalPort">本机绑定端口</param>
-        public Container_Socket_DLL(string Ip, int Port,int Intervals)
+        public Container_Socket(string Ip, int Port,int Intervals)
         {
             IPE = new IPEndPoint(IPAddress.Parse(Ip), Port);
             _Timer = new System.Threading.Timer(AsyncConect2server, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(Intervals));
@@ -150,7 +150,7 @@ namespace Container_Socket_DLL
         {
             try
             {
-                Client.BeginReceive(buffer, 0, Container_Socket_DLL.SIZE, 0, new AsyncCallback(ReceiveCallBack), Client);
+                Client.BeginReceive(buffer, 0, Container_Socket.SIZE, 0, new AsyncCallback(ReceiveCallBack), Client);
             }
             catch (Exception ex)
             {
@@ -193,7 +193,7 @@ namespace Container_Socket_DLL
 
                 if (DataSize > 0)//收到数据,循环接收数据。
                 {
-                    Client.BeginReceive(buffer, 0, Container_Socket_DLL.SIZE, 0, new AsyncCallback(ReceiveCallBack), Client);
+                    Client.BeginReceive(buffer, 0, Container_Socket.SIZE, 0, new AsyncCallback(ReceiveCallBack), Client);
                 }
                 else
                 {
