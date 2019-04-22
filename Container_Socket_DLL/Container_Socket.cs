@@ -27,6 +27,8 @@ namespace Container_Socket_DLL
         private IPEndPoint IPE = null;                                      //IP,PORT
         private IPEndPoint LocalIPE = null;                                 //本机IP，PORT
         private Socket Client = null;                                       //SOCKET
+        private string IP;
+        private string BingIP;
         #endregion
 
         /// <summary>
@@ -65,8 +67,11 @@ namespace Container_Socket_DLL
         /// <param name="Intervals">间隔时间</param>
         /// <param name="LocalIp">本机绑定地址</param>
         /// <param name="LocalPort">本机绑定端口</param>
-        public Container_Socket(string Ip, int Port,int Intervals)
+        public Container_Socket(string Ip, int Port,int Intervals, string Local_Ip_bing = "127.0.0.1", int Local_Port_bing = 12000)
         {
+            IP = Ip;
+            BingIP = Local_Ip_bing;
+
             IPE = new IPEndPoint(IPAddress.Parse(Ip), Port);
             _Timer = new System.Threading.Timer(AsyncConect2server, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(Intervals));
         }
@@ -89,11 +94,15 @@ namespace Container_Socket_DLL
             Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
             {
-                Client.Bind(LocalIPE);
+                if(IP!=BingIP)//本地socket不需要绑定
+                {
+                    Client.Bind(LocalIPE);
+                    MessageEventFunC(System.Reflection.MethodBase.GetCurrentMethod().Name, string.Format("Client.Bind(LocalIPE);{0}",BingIP));
+                }
             }
             catch (Exception ex)
             {
-                MessageEventFunC(System.Reflection.MethodBase.GetCurrentMethod().Name,string.Format("Client.Bind(LocalIPE);{0}", ex.ToString()));
+                MessageEventFunC(System.Reflection.MethodBase.GetCurrentMethod().Name, string.Format("Client.Bind(LocalIPE);{0}", ex.ToString()));
             }
 
             IAsyncResult ar = Client.BeginConnect(IPE, new AsyncCallback(ConnectCallBack), Client);
@@ -120,7 +129,7 @@ namespace Container_Socket_DLL
             catch (SocketException ex)
             {
                 Client.Close();
-                Client = null;
+                //Client = null;
                 MessageEventFunC(System.Reflection.MethodBase.GetCurrentMethod().Name, string.Format("An error occurred when attempting to access the socket：{0}\r\n", ex.ToString()));
 
                 SocketStatusEventFunC(false);
@@ -128,7 +137,7 @@ namespace Container_Socket_DLL
             catch (ObjectDisposedException ex)
             {
                 Client.Close();
-                Client = null;
+                //Client = null;
                 MessageEventFunC(System.Reflection.MethodBase.GetCurrentMethod().Name, string.Format("The Socket has been closed：{0}\r\n", ex.ToString()));
 
                 SocketStatusEventFunC(false);
@@ -198,7 +207,7 @@ namespace Container_Socket_DLL
                 else
                 {
                     Client.Close();
-                    Client = null;
+                    //Client = null;
                     _Timer.Change(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5));
                     //MessageEventFunC(System.Reflection.MethodBase.GetCurrentMethod().Name, "link of close \r\n");
 
@@ -208,7 +217,7 @@ namespace Container_Socket_DLL
             catch (Exception /*ex*/)
             {
                 Client.Close();
-                Client = null;
+                //Client = null;
                 _Timer.Change(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5));
                 //MessageEventFunC(System.Reflection.MethodBase.GetCurrentMethod().Name, ex.ToString());
 

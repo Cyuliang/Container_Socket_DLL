@@ -77,10 +77,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="1189944372_b.ico" />
-    <Content Include="Debug\Container_Socket_DLL.dll" />
-    <Content Include="Debug\Container_Socket_DLL.pdb" />
-    <Content Include="Relese\Container_Socket_DLL.dll" />
-    <Content Include="Relese\Container_Socket_DLL.pdb" />
+    <Content Include="Release\Container_Socket_DLL.dll" />
+    <Content Include="Release\Container_Socket_DLL.pdb" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
