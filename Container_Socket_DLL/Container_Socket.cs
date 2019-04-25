@@ -72,7 +72,9 @@ namespace Container_Socket_DLL
             IP = Ip;
             BingIP = Local_Ip_bing;
 
+            LocalIPE = new IPEndPoint(IPAddress.Parse(Local_Ip_bing), Local_Port_bing);
             IPE = new IPEndPoint(IPAddress.Parse(Ip), Port);
+
             _Timer = new System.Threading.Timer(AsyncConect2server, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(Intervals));
         }
 
